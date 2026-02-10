@@ -64,16 +64,18 @@ async function seed() {
   const faqPath = resolve(rootDir, "../front/src/data/faq.json");
   const ruLocalePath = resolve(rootDir, "../front/src/locales/ru.json");
   const uzLocalePath = resolve(rootDir, "../front/src/locales/uz.json");
+  const enLocalePath = resolve(rootDir, "../front/src/locales/en.json");
 
   const speakersSource = await readJson<{ ru: SpeakerSeed[] }>(speakersPath);
   const faqSource = await readJson<{ ru: FaqSeed[] }>(faqPath);
   const ruLocale = await readJson<NestedObject>(ruLocalePath);
   const uzLocale = await readJson<NestedObject>(uzLocalePath);
+  const enLocale = await readJson<NestedObject>(enLocalePath);
 
   const localeMap: Record<string, NestedObject> = {
     ru: ruLocale,
     uz: uzLocale,
-    en: ruLocale,
+    en: enLocale,
   };
 
   await dataSource.initialize();

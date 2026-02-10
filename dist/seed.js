@@ -36,14 +36,16 @@ async function seed() {
     const faqPath = (0, node_path_1.resolve)(rootDir, "../front/src/data/faq.json");
     const ruLocalePath = (0, node_path_1.resolve)(rootDir, "../front/src/locales/ru.json");
     const uzLocalePath = (0, node_path_1.resolve)(rootDir, "../front/src/locales/uz.json");
+    const enLocalePath = (0, node_path_1.resolve)(rootDir, "../front/src/locales/en.json");
     const speakersSource = await readJson(speakersPath);
     const faqSource = await readJson(faqPath);
     const ruLocale = await readJson(ruLocalePath);
     const uzLocale = await readJson(uzLocalePath);
+    const enLocale = await readJson(enLocalePath);
     const localeMap = {
         ru: ruLocale,
         uz: uzLocale,
-        en: ruLocale,
+        en: enLocale,
     };
     await dataSource.initialize();
     try {
