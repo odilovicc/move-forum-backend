@@ -13,13 +13,21 @@ export class SpeakersService {
   ) {}
 
   findAll() {
-    return this.repo.find({ order: { order: 'ASC' } });
+    return this.repo.find({ order: { order: 'ASC' } }).then((speakers) => {
+      return speakers.map((speaker) => ({
+        ...speaker,
+        photo: this.normalizePhoto(speaker.photo),
+      }));
+    });
   }
 
   async findOne(id: number) {
     const speaker = await this.repo.findOneBy({ id });
     if (!speaker) throw new NotFoundException(`Speaker #${id} not found`);
-    return speaker;
+    return {
+      ...speaker,
+      photo: this.normalizePhoto(speaker.photo),
+    };
   }
 
   async create(dto: CreateSpeakerDto) {
@@ -40,8 +48,37 @@ export class SpeakersService {
     return this.repo.save(speaker);
   }
 
+  async updatePhoto(id: number, photoPath: string) {
+    return this.update(id, { photo: photoPath });
+  }
+
+  async reorder(ids: number[]) {
+    const updates = ids.map((id, index) =>
+      this.repo.update(id, { order: index }),
+    );
+    await Promise.all(updates);
+    return this.findAll();
+  }
+
   async remove(id: number) {
-    const speaker = await this.findOne(id);
+    const speaker = await this.repo.findOneBy({ id });
+    if (!speaker) throw new NotFoundException(`Speaker #${id} not found`);
     return this.repo.remove(speaker);
+  }
+
+  private normalizePhoto(photo: string | null | undefined) {
+    if (!photo) {
+      return '';
+    }
+
+    if (
+      photo.startsWith('/uploads/') ||
+      photo.startsWith('http://') ||
+      photo.startsWith('https://')
+    ) {
+      return photo;
+    }
+
+    return '';
   }
 }

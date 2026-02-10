@@ -11,7 +11,7 @@ const rootDir = process.cwd();
 const dataSource = new typeorm_1.DataSource({
     type: "postgres",
     url: process.env.DATABASE_URL ??
-        "postgresql://postgres:postgres@localhost:5432/offered",
+        "postgresql://offered_user:1231230@localhost:5432/offered",
     entities: [speaker_entity_1.Speaker, faq_item_entity_1.FaqItem, locale_entry_entity_1.LocaleEntry],
     synchronize: true,
 });
@@ -54,7 +54,7 @@ async function seed() {
         const speakers = speakersSource.ru.map((item, index) => speakerRepo.create({
             name: item.name,
             nameEn: item.nameEn,
-            photo: item.photo ?? "",
+            photo: "",
             position: item.position,
             bio: item.bio,
             order: index,

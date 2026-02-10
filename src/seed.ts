@@ -9,7 +9,6 @@ import { LocaleEntry } from "./locales/locale-entry.entity";
 interface SpeakerSeed {
   name: string;
   nameEn: string;
-  photo?: string;
   position: string;
   bio: string;
 }
@@ -30,7 +29,7 @@ const dataSource = new DataSource({
   type: "postgres",
   url:
     process.env.DATABASE_URL ??
-    "postgresql://postgres:postgres@localhost:5432/offered",
+    "postgresql://offered_user:1231230@localhost:5432/offered",
   entities: [Speaker, FaqItem, LocaleEntry],
   synchronize: true,
 });
@@ -92,7 +91,7 @@ async function seed() {
       speakerRepo.create({
         name: item.name,
         nameEn: item.nameEn,
-        photo: item.photo ?? "",
+        photo: "",
         position: item.position,
         bio: item.bio,
         order: index,

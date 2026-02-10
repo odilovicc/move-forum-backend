@@ -7,10 +7,18 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { join } from 'node:path';
+import { mkdirSync } from 'node:fs';
 import { SpeakersService } from './speakers.service';
 import { CreateSpeakerDto } from './dto/create-speaker.dto';
 import { UpdateSpeakerDto } from './dto/update-speaker.dto';
+
+const speakerUploadsPath = join(process.cwd(), 'uploads', 'speakers');
+mkdirSync(speakerUploadsPath, { recursive: true });
 
 @Controller('speakers')
 export class SpeakersController {
@@ -29,6 +37,25 @@ export class SpeakersController {
   @Post()
   create(@Body() dto: CreateSpeakerDto) {
     return this.speakersService.create(dto);
+  }
+
+  @Put('reorder/batch')
+  reorder(@Body() body: { ids: number[] }) {
+    return this.speakersService.reorder(body.ids);
+  }
+
+  @Post(':id/photo')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      dest: speakerUploadsPath,
+    }),
+  )
+  async uploadPhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: { filename: string },
+  ) {
+    const photoPath = `/uploads/speakers/${file.filename}`;
+    return this.speakersService.updatePhoto(id, photoPath);
   }
 
   @Put(':id')

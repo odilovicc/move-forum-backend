@@ -16,7 +16,9 @@ import { LocaleEntry } from './locales/locale-entry.entity';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        url: config.get('DATABASE_URL'),
+        url:
+          config.get<string>('DATABASE_URL') ??
+          'postgresql://offered_user:1231230@localhost:5432/offered',
         entities: [Speaker, FaqItem, LocaleEntry],
         synchronize: true,
       }),

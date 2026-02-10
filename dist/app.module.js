@@ -28,7 +28,8 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
                 useFactory: (config) => ({
                     type: 'postgres',
-                    url: config.get('DATABASE_URL'),
+                    url: config.get('DATABASE_URL') ??
+                        'postgresql://offered_user:1231230@localhost:5432/offered',
                     entities: [speaker_entity_1.Speaker, faq_item_entity_1.FaqItem, locale_entry_entity_1.LocaleEntry],
                     synchronize: true,
                 }),

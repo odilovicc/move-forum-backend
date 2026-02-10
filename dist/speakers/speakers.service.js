@@ -23,13 +23,21 @@ let SpeakersService = class SpeakersService {
         this.repo = repo;
     }
     findAll() {
-        return this.repo.find({ order: { order: 'ASC' } });
+        return this.repo.find({ order: { order: 'ASC' } }).then((speakers) => {
+            return speakers.map((speaker) => ({
+                ...speaker,
+                photo: this.normalizePhoto(speaker.photo),
+            }));
+        });
     }
     async findOne(id) {
         const speaker = await this.repo.findOneBy({ id });
         if (!speaker)
             throw new common_1.NotFoundException(`Speaker #${id} not found`);
-        return speaker;
+        return {
+            ...speaker,
+            photo: this.normalizePhoto(speaker.photo),
+        };
     }
     async create(dto) {
         if (dto.order === undefined) {
@@ -47,9 +55,30 @@ let SpeakersService = class SpeakersService {
         Object.assign(speaker, dto);
         return this.repo.save(speaker);
     }
+    async updatePhoto(id, photoPath) {
+        return this.update(id, { photo: photoPath });
+    }
+    async reorder(ids) {
+        const updates = ids.map((id, index) => this.repo.update(id, { order: index }));
+        await Promise.all(updates);
+        return this.findAll();
+    }
     async remove(id) {
-        const speaker = await this.findOne(id);
+        const speaker = await this.repo.findOneBy({ id });
+        if (!speaker)
+            throw new common_1.NotFoundException(`Speaker #${id} not found`);
         return this.repo.remove(speaker);
+    }
+    normalizePhoto(photo) {
+        if (!photo) {
+            return '';
+        }
+        if (photo.startsWith('/uploads/') ||
+            photo.startsWith('http://') ||
+            photo.startsWith('https://')) {
+            return photo;
+        }
+        return '';
     }
 };
 exports.SpeakersService = SpeakersService;

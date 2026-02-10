@@ -14,9 +14,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpeakersController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
+const node_path_1 = require("node:path");
+const node_fs_1 = require("node:fs");
 const speakers_service_1 = require("./speakers.service");
 const create_speaker_dto_1 = require("./dto/create-speaker.dto");
 const update_speaker_dto_1 = require("./dto/update-speaker.dto");
+const speakerUploadsPath = (0, node_path_1.join)(process.cwd(), 'uploads', 'speakers');
+(0, node_fs_1.mkdirSync)(speakerUploadsPath, { recursive: true });
 let SpeakersController = class SpeakersController {
     speakersService;
     constructor(speakersService) {
@@ -30,6 +35,13 @@ let SpeakersController = class SpeakersController {
     }
     create(dto) {
         return this.speakersService.create(dto);
+    }
+    reorder(body) {
+        return this.speakersService.reorder(body.ids);
+    }
+    async uploadPhoto(id, file) {
+        const photoPath = `/uploads/speakers/${file.filename}`;
+        return this.speakersService.updatePhoto(id, photoPath);
     }
     update(id, dto) {
         return this.speakersService.update(id, dto);
@@ -59,6 +71,24 @@ __decorate([
     __metadata("design:paramtypes", [create_speaker_dto_1.CreateSpeakerDto]),
     __metadata("design:returntype", void 0)
 ], SpeakersController.prototype, "create", null);
+__decorate([
+    (0, common_1.Put)('reorder/batch'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], SpeakersController.prototype, "reorder", null);
+__decorate([
+    (0, common_1.Post)(':id/photo'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
+        dest: speakerUploadsPath,
+    })),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], SpeakersController.prototype, "uploadPhoto", null);
 __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
