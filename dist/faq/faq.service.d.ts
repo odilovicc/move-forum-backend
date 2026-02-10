@@ -11,4 +11,5 @@ export declare class FaqService {
     update(id: number, dto: UpdateFaqDto): Promise<FaqItem>;
     remove(id: number): Promise<FaqItem>;
     reorder(ids: number[]): Promise<FaqItem[]>;
+    private normalizeDto;
 }

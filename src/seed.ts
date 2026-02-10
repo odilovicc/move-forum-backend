@@ -104,6 +104,8 @@ async function seed() {
       faqRepo.create({
         question: item.question,
         answer: item.answer,
+        questionRu: item.question,
+        answerRu: item.answer,
         order: index,
       }),
     );

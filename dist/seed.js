@@ -64,6 +64,8 @@ async function seed() {
         const faqItems = faqSource.ru.map((item, index) => faqRepo.create({
             question: item.question,
             answer: item.answer,
+            questionRu: item.question,
+            answerRu: item.answer,
             order: index,
         }));
         const localeEntries = Object.entries(localeMap).flatMap(([locale, data]) => {

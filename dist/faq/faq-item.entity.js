@@ -15,6 +15,12 @@ let FaqItem = class FaqItem {
     id;
     question;
     answer;
+    questionRu;
+    answerRu;
+    questionUz;
+    answerUz;
+    questionEn;
+    answerEn;
     order;
     createdAt;
     updatedAt;
@@ -32,6 +38,30 @@ __decorate([
     (0, typeorm_1.Column)('text'),
     __metadata("design:type", String)
 ], FaqItem.prototype, "answer", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], FaqItem.prototype, "questionRu", void 0);
+__decorate([
+    (0, typeorm_1.Column)('text', { nullable: true }),
+    __metadata("design:type", String)
+], FaqItem.prototype, "answerRu", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], FaqItem.prototype, "questionUz", void 0);
+__decorate([
+    (0, typeorm_1.Column)('text', { nullable: true }),
+    __metadata("design:type", String)
+], FaqItem.prototype, "answerUz", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], FaqItem.prototype, "questionEn", void 0);
+__decorate([
+    (0, typeorm_1.Column)('text', { nullable: true }),
+    __metadata("design:type", String)
+], FaqItem.prototype, "answerEn", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: 0 }),
     __metadata("design:type", Number)

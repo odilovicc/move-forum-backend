@@ -39,12 +39,14 @@ let FaqService = class FaqService {
                 .getRawOne();
             dto.order = (max?.maxOrder ?? -1) + 1;
         }
-        const item = this.repo.create(dto);
+        const normalized = this.normalizeDto(dto);
+        const item = this.repo.create(normalized);
         return this.repo.save(item);
     }
     async update(id, dto) {
         const item = await this.findOne(id);
-        Object.assign(item, dto);
+        const normalized = this.normalizeDto(dto);
+        Object.assign(item, normalized);
         return this.repo.save(item);
     }
     async remove(id) {
@@ -55,6 +57,24 @@ let FaqService = class FaqService {
         const updates = ids.map((id, index) => this.repo.update(id, { order: index }));
         await Promise.all(updates);
         return this.findAll();
+    }
+    normalizeDto(dto) {
+        const normalized = { ...dto };
+        const questionRu = dto.questionRu ?? dto.question;
+        const answerRu = dto.answerRu ?? dto.answer;
+        if (questionRu) {
+            normalized.questionRu = questionRu;
+        }
+        if (answerRu) {
+            normalized.answerRu = answerRu;
+        }
+        if (!dto.question && questionRu) {
+            normalized.question = questionRu;
+        }
+        if (!dto.answer && answerRu) {
+            normalized.answer = answerRu;
+        }
+        return normalized;
     }
 };
 exports.FaqService = FaqService;

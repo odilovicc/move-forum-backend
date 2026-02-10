@@ -14,6 +14,12 @@ const class_validator_1 = require("class-validator");
 class UpdateFaqDto {
     question;
     answer;
+    questionRu;
+    answerRu;
+    questionUz;
+    answerUz;
+    questionEn;
+    answerEn;
     order;
 }
 exports.UpdateFaqDto = UpdateFaqDto;
@@ -27,6 +33,36 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateFaqDto.prototype, "answer", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateFaqDto.prototype, "questionRu", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateFaqDto.prototype, "answerRu", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateFaqDto.prototype, "questionUz", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateFaqDto.prototype, "answerUz", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateFaqDto.prototype, "questionEn", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateFaqDto.prototype, "answerEn", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
