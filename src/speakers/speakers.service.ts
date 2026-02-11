@@ -38,13 +38,15 @@ export class SpeakersService {
         .getRawOne();
       dto.order = (max?.maxOrder ?? -1) + 1;
     }
-    const speaker = this.repo.create(dto);
+    const normalized = this.normalizeDto(dto);
+    const speaker = this.repo.create(normalized);
     return this.repo.save(speaker);
   }
 
   async update(id: number, dto: UpdateSpeakerDto) {
     const speaker = await this.findOne(id);
-    Object.assign(speaker, dto);
+    const normalized = this.normalizeDto(dto);
+    Object.assign(speaker, normalized);
     return this.repo.save(speaker);
   }
 
@@ -80,5 +82,35 @@ export class SpeakersService {
     }
 
     return '';
+  }
+
+  private normalizeDto(dto: CreateSpeakerDto | UpdateSpeakerDto) {
+    const normalized = { ...dto } as Record<string, unknown>;
+
+    const nameRu = (dto as CreateSpeakerDto).nameRu ?? dto.name;
+    const positionRu = (dto as CreateSpeakerDto).positionRu ?? dto.position;
+    const bioRu = (dto as CreateSpeakerDto).bioRu ?? dto.bio;
+
+    if (nameRu) {
+      normalized.nameRu = nameRu;
+    }
+    if (positionRu) {
+      normalized.positionRu = positionRu;
+    }
+    if (bioRu) {
+      normalized.bioRu = bioRu;
+    }
+
+    if (!dto.name && nameRu) {
+      normalized.name = nameRu;
+    }
+    if (!dto.position && positionRu) {
+      normalized.position = positionRu;
+    }
+    if (!dto.bio && bioRu) {
+      normalized.bio = bioRu;
+    }
+
+    return normalized;
   }
 }

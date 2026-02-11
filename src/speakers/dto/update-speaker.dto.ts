@@ -7,6 +7,14 @@ export class UpdateSpeakerDto {
 
   @IsOptional()
   @IsString()
+  nameRu?: string;
+
+  @IsOptional()
+  @IsString()
+  nameUz?: string;
+
+  @IsOptional()
+  @IsString()
   nameEn?: string;
 
   @IsOptional()
@@ -19,7 +27,31 @@ export class UpdateSpeakerDto {
 
   @IsOptional()
   @IsString()
+  positionRu?: string;
+
+  @IsOptional()
+  @IsString()
+  positionUz?: string;
+
+  @IsOptional()
+  @IsString()
+  positionEn?: string;
+
+  @IsOptional()
+  @IsString()
   bio?: string;
+
+  @IsOptional()
+  @IsString()
+  bioRu?: string;
+
+  @IsOptional()
+  @IsString()
+  bioUz?: string;
+
+  @IsOptional()
+  @IsString()
+  bioEn?: string;
 
   @IsOptional()
   @IsInt()
