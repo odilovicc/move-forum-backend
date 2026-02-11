@@ -28,7 +28,7 @@ async function readJson<T>(path: string): Promise<T> {
 }
 
 async function seed() {
-  const speakersPath = resolve(rootDir, "../front/src/data/speakers.json");
+  const speakersPath = resolve(rootDir, "/var/www/move-forum/src/data/speakers.json");
 
   const speakersSource = await readJson<{ ru: SpeakerSeed[] }>(speakersPath);
 

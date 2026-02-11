@@ -44,10 +44,25 @@ export class SpeakersService {
   }
 
   async update(id: number, dto: UpdateSpeakerDto) {
-    const speaker = await this.findOne(id);
+    // IMPORTANT: use the actual entity for updates.
+    // findOne() normalizes photo for the API response ("" when missing),
+    // which can accidentally wipe photo when the frontend sends photo: "".
+    const speaker = await this.repo.findOneBy({ id });
+    if (!speaker) throw new NotFoundException(`Speaker # not found`);
+
     const normalized = this.normalizeDto(dto);
+
+    // If client sends empty photo, ignore it (keep existing file reference).
+    if (dto.photo !== undefined && String(dto.photo).trim() === "") {
+      delete (normalized as any).photo;
+    }
+
     Object.assign(speaker, normalized);
-    return this.repo.save(speaker);
+    const saved = await this.repo.save(speaker);
+    return {
+      ...saved,
+      photo: this.normalizePhoto(saved.photo),
+    };
   }
 
   async updatePhoto(id: number, photoPath: string) {
