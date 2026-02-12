@@ -52,27 +52,11 @@ export class SpeakersService {
 
     const normalized = this.normalizeDto(dto);
 
-    // If client sends empty/placeholder photo:
-    // - If it's part of a broader update payload (common after uploading photo), IGNORE to avoid wiping.
-    // - If it's the ONLY field being updated, treat as an explicit request to clear the photo.
+    // If client sends empty photo, ignore it (keep existing file reference).
     if (dto.photo !== undefined) {
       const v = String(dto.photo).trim();
-      if (
-        v === '' ||
-        v === '/uploads/' ||
-        v === '/uploads/speakers/' ||
-        v === 'null' ||
-        v === 'undefined'
-      ) {
-        const otherKeys = Object.keys(dto as any).filter(
-          (k) => k !== 'photo' && (dto as any)[k] !== undefined,
-        );
-
-        if (otherKeys.length > 0) {
-          delete (normalized as any).photo;
-        } else {
-          (normalized as any).photo = '';
-        }
+      if (v === "" || v === "/uploads/" || v === "/uploads/speakers/" || v === "null" || v === "undefined") {
+        delete (normalized as any).photo;
       }
     }
 
