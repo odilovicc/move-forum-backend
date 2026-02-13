@@ -49,7 +49,7 @@ export const DEFAULT_LOCALE_ENTRIES: DefaultLocaleEntry[] = [
   {
     locale: 'ru',
     key: 'seo.title',
-    value: 'Public & Corporate Procurement Forum Uzbekistan — 2026',
+    value: 'Форум государственных и корпоративных закупок Узбекистана — 2026',
   },
   {
     locale: 'uz',
@@ -233,6 +233,81 @@ export const DEFAULT_LOCALE_ENTRIES: DefaultLocaleEntry[] = [
   {
     locale: 'en',
     key: 'seo.event_location_address',
+    value: '',
+  },
+  {
+    locale: 'ru',
+    key: 'social.telegram',
+    value: '',
+  },
+  {
+    locale: 'uz',
+    key: 'social.telegram',
+    value: '',
+  },
+  {
+    locale: 'en',
+    key: 'social.telegram',
+    value: '',
+  },
+  {
+    locale: 'ru',
+    key: 'social.facebook',
+    value: '',
+  },
+  {
+    locale: 'uz',
+    key: 'social.facebook',
+    value: '',
+  },
+  {
+    locale: 'en',
+    key: 'social.facebook',
+    value: '',
+  },
+  {
+    locale: 'ru',
+    key: 'social.website',
+    value: '',
+  },
+  {
+    locale: 'uz',
+    key: 'social.website',
+    value: '',
+  },
+  {
+    locale: 'en',
+    key: 'social.website',
+    value: '',
+  },
+  {
+    locale: 'ru',
+    key: 'social.instagram',
+    value: '',
+  },
+  {
+    locale: 'uz',
+    key: 'social.instagram',
+    value: '',
+  },
+  {
+    locale: 'en',
+    key: 'social.instagram',
+    value: '',
+  },
+  {
+    locale: 'ru',
+    key: 'social.youtube',
+    value: '',
+  },
+  {
+    locale: 'uz',
+    key: 'social.youtube',
+    value: '',
+  },
+  {
+    locale: 'en',
+    key: 'social.youtube',
     value: '',
   },
   {
