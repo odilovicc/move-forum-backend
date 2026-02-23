@@ -15,11 +15,20 @@ async function bootstrap() {
   const localhostPattern = /^http:\/\/localhost:\d+$/;
   const localhostIpPattern = /^http:\/\/127\.0\.0\.1:\d+$/;
 
+  // Allow production domains without reconfiguring CORS every deploy.
+  // - procureforum.uz
+  // - www.procureforum.uz
+  // - admin.procureforum.uz
+  // - api.procureforum.uz
+  // - and any other subdomain if needed
+  const procureforumPattern = /^https?:\/\/(?:[a-z0-9-]+\.)*procureforum\.uz$/i;
+
   app.enableCors({
     origin: (
       origin: string | undefined,
       callback: (err: Error | null, allow?: boolean) => void,
     ) => {
+      // Requests without Origin (server-to-server, curl, mobile apps) should pass.
       if (!origin) {
         callback(null, true);
         return;
@@ -28,8 +37,9 @@ async function bootstrap() {
       const isEnvAllowed = envOrigins.includes(origin);
       const isLocalAllowed =
         localhostPattern.test(origin) || localhostIpPattern.test(origin);
+      const isProcureforumAllowed = procureforumPattern.test(origin);
 
-      if (isEnvAllowed || isLocalAllowed) {
+      if (isEnvAllowed || isLocalAllowed || isProcureforumAllowed) {
         callback(null, true);
         return;
       }
