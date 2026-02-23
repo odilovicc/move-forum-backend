@@ -18,6 +18,21 @@ export const DEFAULT_LOCALE_ENTRIES: DefaultLocaleEntry[] = [
   },
   {
     locale: 'ru',
+    key: 'speakers.view_profile',
+    value: 'Посмотреть профиль',
+  },
+  {
+    locale: 'uz',
+    key: 'speakers.view_profile',
+    value: "Profilni ko‘rish",
+  },
+  {
+    locale: 'en',
+    key: 'speakers.view_profile',
+    value: 'View profile',
+  },
+  {
+    locale: 'ru',
     key: 'seo.site_url',
     value: 'https://procureforum.uz',
   },

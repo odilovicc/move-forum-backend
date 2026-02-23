@@ -70,7 +70,11 @@ async function loadLocaleEntries() {
     entries.push(entry as LocaleEntry);
   }
 
-  return entries;
+  const unique = new Map<string, LocaleEntry>();
+  for (const entry of entries) {
+    unique.set(`${entry.locale}:${entry.key}`, entry);
+  }
+  return Array.from(unique.values());
 }
 
 async function seedLocales() {
@@ -81,8 +85,43 @@ async function seedLocales() {
     return;
   }
 
-  await localeRepo.upsert(entries, ["locale", "key"]);
-  console.log(`Locales seeded: ${entries.length} entries`);
+  const existing = await localeRepo.find({
+    select: ["locale", "key", "value"],
+  });
+  const existingMap = new Map(
+    existing.map((entry) => [`${entry.locale}:${entry.key}`, entry.value]),
+  );
+
+  const toInsert: LocaleEntry[] = [];
+  const toUpdate: LocaleEntry[] = [];
+
+  for (const entry of entries) {
+    const mapKey = `${entry.locale}:${entry.key}`;
+    const currentValue = existingMap.get(mapKey);
+    if (currentValue === undefined) {
+      toInsert.push(entry);
+      continue;
+    }
+    if (currentValue === "" || currentValue === entry.key) {
+      toUpdate.push(entry);
+    }
+  }
+
+  if (toInsert.length === 0 && toUpdate.length === 0) {
+    console.log("Locales seed skipped: нет новых ключей или пустых значений.");
+    return;
+  }
+
+  if (toInsert.length > 0) {
+    await localeRepo.insert(toInsert);
+  }
+  if (toUpdate.length > 0) {
+    await localeRepo.upsert(toUpdate, ["locale", "key"]);
+  }
+
+  console.log(
+    `Locales seeded: ${toInsert.length} новых, ${toUpdate.length} обновлено`,
+  );
 }
 
 async function seedSpeakers() {
