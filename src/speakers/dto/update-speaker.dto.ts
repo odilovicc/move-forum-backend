@@ -23,6 +23,10 @@ export class UpdateSpeakerDto {
 
   @IsOptional()
   @IsString()
+  photoPosition?: string;
+
+  @IsOptional()
+  @IsString()
   position?: string;
 
   @IsOptional()

@@ -21,6 +21,10 @@ export class CreateSpeakerDto {
 
   @IsOptional()
   @IsString()
+  photoPosition?: string;
+
+  @IsOptional()
+  @IsString()
   position?: string;
 
   @IsString()

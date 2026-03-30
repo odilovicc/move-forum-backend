@@ -26,6 +26,9 @@ export class Speaker {
   @Column({ default: '' })
   photo: string;
 
+  @Column({ default: 'center' })
+  photoPosition: string;
+
   @Column()
   position: string;
 
