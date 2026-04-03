@@ -41,7 +41,7 @@ export class Speaker {
   @Column({ nullable: true })
   positionEn: string;
 
-  @Column('text')
+  @Column('text', {nullable: true})
   bio: string;
 
   @Column('text', { nullable: true })
