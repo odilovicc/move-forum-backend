@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsInt } from 'class-validator';
+import { IsString, IsOptional, IsInt, IsNotEmpty } from 'class-validator';
 
 export class UpdateSpeakerDto {
   @IsOptional()
@@ -6,6 +6,7 @@ export class UpdateSpeakerDto {
   name?: string;
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   nameRu?: string;
 
@@ -14,6 +15,7 @@ export class UpdateSpeakerDto {
   nameUz?: string;
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   nameEn?: string;
 
@@ -30,6 +32,7 @@ export class UpdateSpeakerDto {
   position?: string;
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   positionRu?: string;
 
@@ -46,6 +49,7 @@ export class UpdateSpeakerDto {
   bio?: string;
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   bioRu?: string;
 
