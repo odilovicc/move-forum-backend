@@ -186,11 +186,86 @@ async function seedFaq() {
   console.log(`FAQ seeded: ${toInsert.length} items`);
 }
 
+async function seedScheduleOpeningLocales() {
+  const localeRepo = dataSource.getRepository(LocaleEntry);
+  const localesDir =
+    process.env.LOCALES_DIR ??
+    resolve(rootDir, "../front/src/locales");
+  const targetLocales = ["ru", "uz", "en"];
+  const targetKeys = ["schedule.opening.speaker1", "schedule.opening.topic1"];
+
+  const entries: LocaleEntry[] = [];
+
+  for (const locale of targetLocales) {
+    try {
+      const data = await readJson<Record<string, unknown>>(
+        resolve(localesDir, `${locale}.json`),
+      );
+      const flat = flattenLocale(data);
+      for (const key of targetKeys) {
+        if (key in flat) {
+          entries.push({ locale, key, value: flat[key] } as LocaleEntry);
+        } else {
+          console.warn(
+            `Locale key not found in ${locale}.json: ${key}`,
+          );
+        }
+      }
+    } catch (error) {
+      console.warn(
+        `Locale file not found (${resolve(localesDir, `${locale}.json`)}), skipping.`,
+      );
+    }
+  }
+
+  if (entries.length === 0) {
+    console.warn("No schedule.opening speaker/topic entries found, skipping.");
+    return;
+  }
+
+  const existing = await localeRepo.find({
+    select: ["locale", "key", "value"],
+    where: entries.map((entry) => ({ locale: entry.locale, key: entry.key })),
+  });
+  const existingMap = new Map(
+    existing.map((entry) => [`${entry.locale}:${entry.key}`, entry.value]),
+  );
+
+  const toInsert: LocaleEntry[] = [];
+  const toUpdate: LocaleEntry[] = [];
+
+  for (const entry of entries) {
+    const mapKey = `${entry.locale}:${entry.key}`;
+    const currentValue = existingMap.get(mapKey);
+    if (currentValue === undefined) {
+      toInsert.push(entry);
+      continue;
+    }
+    if (currentValue === "" || currentValue === entry.key) {
+      toUpdate.push(entry);
+    }
+  }
+
+  if (toInsert.length > 0) {
+    await localeRepo.insert(toInsert);
+  }
+  if (toUpdate.length > 0) {
+    await localeRepo.upsert(toUpdate, ["locale", "key"]);
+  }
+
+  console.log(
+    `Schedule opening locales seeded: ${toInsert.length} новых, ${toUpdate.length} обновлено`,
+  );
+}
+
 async function seed() {
   await dataSource.initialize();
 
   try {
     await seedLocales();
+    if (process.env.SEED_SCHEDULE_OPENING === "1") {
+      await seedScheduleOpeningLocales();
+    }
     await seedSpeakers();
     await seedFaq();
   } finally {
